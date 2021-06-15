@@ -73,7 +73,8 @@ def _inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
     if not hit_result["crit"]:
         return dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=False) if hit_result["hit"] else 0
     else:
-        return dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=True) + new_crit_thread(hit_dc, enemy_ac, indent + INDENT, advantage=advantage, verbose=verbose)
+        return dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=True) + \
+            new_crit_thread(hit_dc, enemy_ac, indent + INDENT, advantage=advantage, verbose=verbose)
 
 def inf_axe_attack(hit_dc, enemy_ac, advantage=False, verbose=True):
     tot_dmg = _inf_axe_attack(hit_dc, enemy_ac, '', advantage=advantage, verbose=verbose)
@@ -94,15 +95,11 @@ def median(results):
         return average([_sorted[middle],_sorted[middle-1]]) 
     return _sorted[middle]
 
-#enemy_acs = range(11, 22)
 enemy_acs = range(11,22)
 hit_dc = 9
-#advantage = False
 advantage = True
-#trials = int(1e4)
 trials = 1000
 verbose = False
-#verbose = True
 
 for enemy_ac in enemy_acs:
     results = []
