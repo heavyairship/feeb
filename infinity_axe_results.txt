@@ -1,0 +1,4 @@
+  File "infinity_axe.py", line 15
+    msg = f"{indent}HIT ROLL: {_roll} + {hit_dc} = {tot_roll}"
+                                                             ^
+SyntaxError: invalid syntax
