@@ -89,7 +89,7 @@ def median(results):
         return average([_sorted[middle],_sorted[middle-1]]) 
     return _sorted[middle]
 
-enemy_acs = [11, 12, 13, 14, 15]
+enemy_acs = range(11, 22)
 hit_dc = 9
 trials = int(1e4)
 verbose = False
