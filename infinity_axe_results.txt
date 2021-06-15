@@ -1,4 +1,25 @@
-  File "infinity_axe.py", line 15
-    msg = f"{indent}HIT ROLL: {_roll} + {hit_dc} = {tot_roll}"
-                                                             ^
-SyntaxError: invalid syntax
+ENEMY AC: 11
+PLAYER HIT DC: 9
+AVERAGE DMG (N=10000): 2643.7437
+MEDIAN DMG (N=10000): 12.0
+************
+ENEMY AC: 12
+PLAYER HIT DC: 9
+AVERAGE DMG (N=10000): 22.9432
+MEDIAN DMG (N=10000): 11.0
+************
+ENEMY AC: 13
+PLAYER HIT DC: 9
+AVERAGE DMG (N=10000): 15.3895
+MEDIAN DMG (N=10000): 11.0
+************
+ENEMY AC: 14
+PLAYER HIT DC: 9
+AVERAGE DMG (N=10000): 11.8525
+MEDIAN DMG (N=10000): 10.0
+************
+ENEMY AC: 15
+PLAYER HIT DC: 9
+AVERAGE DMG (N=10000): 10.7129
+MEDIAN DMG (N=10000): 10.0
+************
