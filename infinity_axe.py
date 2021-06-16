@@ -107,7 +107,7 @@ def trim_bins(bins, data):
 enemy_acs = range(15,22)
 hit_dc = 9
 advantage = True
-trials = 10000
+trials = 1000
 verbose = False
 bins = get_bins()
 log_bins = get_log_bins()
