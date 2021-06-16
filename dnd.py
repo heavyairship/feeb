@@ -4,7 +4,7 @@ INDENT = "  "
 CRIT_ROLL = 20
 CRIT_MULTIPLIER = 2
 
-def log(verbose, msg):
+def log(msg, verbose):
     if verbose:
         print(msg)
 

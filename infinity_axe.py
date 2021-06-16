@@ -67,9 +67,9 @@ def run_simulations():
             data.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
             dnd.log("************", verbose)
 
+        data = sorted(data)
         average = numpy.average(data)
         median = int(numpy.median(data))
-        data = sorted(data)
         log_data = sorted([math.log(x, 10) if x > 0 else 0 for x in data])
 
         print(f"ENEMY AC: {enemy_ac}")
@@ -87,7 +87,7 @@ def run_simulations():
         ax.set_ylabel('count')
         ax.set_xlabel('dmg')
         ax.set_title(f"infinity axe dmg vs ac={enemy_ac} (med={median}, avg={average})")
-        matplotlib.pyplot.savefig(f"./data/ac_{enemy_ac}.png")
+        matplotlib.pyplot.savefig(f"./data/inf/ac_{enemy_ac}.png")
 
         # count vs log(dmg), normal scale
         _, ax = matplotlib.pyplot.subplots()
@@ -97,6 +97,6 @@ def run_simulations():
         ax.set_ylabel('count')
         ax.set_xlabel('log(dmg)')
         ax.set_title(f"infinity axe log(dmg) vs ac={enemy_ac} (med={median}, avg={average})")
-        matplotlib.pyplot.savefig(f"./data/ac_{enemy_ac}_log.png")
+        matplotlib.pyplot.savefig(f"./data/inf/ac_{enemy_ac}_log.png")
 
 run_simulations()
