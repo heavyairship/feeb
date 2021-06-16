@@ -105,7 +105,6 @@ advantage = True
 trials = 1000
 verbose = False
 bins = get_bins()
-print(bins)
 
 for enemy_ac in enemy_acs:
     data = []
@@ -113,7 +112,7 @@ for enemy_ac in enemy_acs:
         data.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
         if verbose:
             print("************")
-            
+
     data = sorted(data)
     average = numpy.average(data)
     median = int(numpy.median(data))
@@ -122,7 +121,6 @@ for enemy_ac in enemy_acs:
     print(f"PLAYER HIT DC: {hit_dc}")
     print(f"AVERAGE DMG (N={trials}): {average}")
     print(f"MEDIAN DMG (N={trials}): {median}")
-    print(data)
     print("************")
 
     fig, ax = plt.subplots()
