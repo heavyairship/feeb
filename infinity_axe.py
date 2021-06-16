@@ -1,4 +1,5 @@
-import random, sys
+import random, sys, numpy
+import matplotlib.pyplot as plt
 
 sys.setrecursionlimit(5000)
 
@@ -90,33 +91,45 @@ def inf_axe_attack(hit_dc, enemy_ac, advantage=False, verbose=True):
         print(f"TOTAL DMG: {tot_dmg}")
     return tot_dmg
 
-def average(results):
-    s = 0
-    for r in results:
-        s += r
-    return s/len(results)
-
-def median(results):
-    _sorted = sorted(results)
-    middle = int(len(results)/2)
-    if len(results) % 2 == 0:
-        return average([_sorted[middle],_sorted[middle-1]]) 
-    return _sorted[middle]
+def get_bins():
+    out = list(range(0,101))
+    for e in range(2, 5):
+        for i in range(10**e, 10**(e+1)+1):
+            if i % (10**e) == 0:
+                out.append(i)
+    return sorted(list(set(out)))
 
 enemy_acs = range(15,22)
 hit_dc = 9
 advantage = True
 trials = 1000
 verbose = False
+bins = get_bins()
+print(bins)
 
 for enemy_ac in enemy_acs:
-    results = []
+    data = []
     for i in range(trials):
-        results.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
+        data.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
         if verbose:
             print("************")
+    data = sorted(data)
+
+    average = numpy.average(data)
+    median = int(numpy.median(data))
+
     print(f"ENEMY AC: {enemy_ac}")
     print(f"PLAYER HIT DC: {hit_dc}")
-    print(f"AVERAGE DMG (N={trials}): {average(results)}")
-    print(f"MEDIAN DMG (N={trials}): {median(results)}")
+    print(f"AVERAGE DMG (N={trials}): {average}")
+    print(f"MEDIAN DMG (N={trials}): {median}")
     print("************")
+
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=bins, ec="k")
+    ax.locator_params(axis="y", integer=True)
+    ax.locator_params(axis="x", integer=True)
+    ax.set_xscale('log')
+    ax.set_ylabel('count')
+    ax.set_xlabel('log(dmg)')
+    ax.set_title(f"infinity axe dmg vs ac={enemy_ac} (median={median})")
+    plt.savefig(f"ac_{enemy_ac}.png")
