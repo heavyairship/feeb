@@ -136,7 +136,7 @@ for enemy_ac in enemy_acs:
     ax.locator_params(axis="x", integer=True)
     ax.set_xscale('log')
     ax.set_ylabel('count')
-    ax.set_xlabel('log(dmg)')
+    ax.set_xlabel('dmg')
     ax.set_title(f"infinity axe dmg vs ac={enemy_ac} (median={median})")
     plt.savefig(f"./data/ac_{enemy_ac}.png")
 
