@@ -138,7 +138,7 @@ for enemy_ac in enemy_acs:
     ax.set_ylabel('count')
     ax.set_xlabel('log(dmg)')
     ax.set_title(f"infinity axe dmg vs ac={enemy_ac} (median={median})")
-    plt.savefig(f"ac_{enemy_ac}.png")
+    plt.savefig(f"./data/ac_{enemy_ac}.png")
 
     fig, ax = plt.subplots()
     ax.hist(log_data, bins=trim_bins(log_bins, log_data), ec="k")
@@ -147,4 +147,4 @@ for enemy_ac in enemy_acs:
     ax.set_ylabel('count')
     ax.set_xlabel('log(dmg)')
     ax.set_title(f"infinity axe log(dmg) vs ac={enemy_ac} (median={median})")
-    plt.savefig(f"ac_{enemy_ac}_log.png")
+    plt.savefig(f"./data/ac_{enemy_ac}_log.png")
