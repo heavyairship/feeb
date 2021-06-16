@@ -1,19 +1,19 @@
 clean:
 	rm -rf ./data 
 
-clean_inf:
-	rm -rf ./data/inf
+clean_bot:
+	rm -rf ./data/bot
 
 clean_sal:
 	rm -rf ./data/sal
 
-inf: clean_inf
-	mkdir -p ./data/inf && python3 infinity_axe.py > ./data/inf/infinity_axe_results.txt
+bot: clean_bot
+	mkdir -p ./data/bot && python3 ragebot3000.py > ./data/bot/ragebot3000_results.txt
 
 sal: clean_sal
 	mkdir -p ./data/sal && python3 salamandrew.py > ./data/sal/salamandrew_results.txt
 
-all: inf sal
+all: bot sal
 
 update:
 	git add . && git commit -m "update" && git push origin master

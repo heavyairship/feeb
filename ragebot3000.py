@@ -4,7 +4,7 @@ import matplotlib.pyplot
 import dnd
 import dnd_stats
 
-def _inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
+def inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
 
     # Infinity Axe key stats
     die_rank = 12
@@ -37,8 +37,10 @@ def _inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
         tot_dmg += thread_dmg
     return tot_dmg
 
-def inf_axe_attack(hit_dc, enemy_ac, advantage=False, verbose=True):
-    tot_dmg = _inf_axe_attack(hit_dc, enemy_ac, '', advantage=advantage, verbose=verbose)
+def ragebot3000_attack(attacks, hit_dc, enemy_ac, advantage=False, verbose=True):
+    tot_dmg = 0
+    for _ in range(attacks):
+        tot_dmg += inf_axe_attack(hit_dc, enemy_ac, '', advantage=advantage, verbose=verbose)
     dnd.log(f"TOTAL DMG: {tot_dmg}", verbose)
     return tot_dmg
 
@@ -54,6 +56,7 @@ def get_log_bins():
 
 def run_simulations():
     enemy_acs = range(15,22)
+    attacks = 2
     hit_dc = 9
     advantage = True
     trials = 100
@@ -64,7 +67,7 @@ def run_simulations():
     for enemy_ac in enemy_acs:
         data = []
         for _ in range(trials):
-            data.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
+            data.append(ragebot3000_attack(attacks, hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
             dnd.log("************", verbose)
 
         data = sorted(data)
@@ -86,8 +89,8 @@ def run_simulations():
         ax.set_xscale('log')
         ax.set_ylabel('count')
         ax.set_xlabel('dmg')
-        ax.set_title(f"infinity axe dmg vs ac={enemy_ac} (med={median}, avg={average})")
-        matplotlib.pyplot.savefig(f"./data/inf/ac_{enemy_ac}.png")
+        ax.set_title(f"ragebot3000 dmg vs ac={enemy_ac} (med={median}, avg={average})")
+        matplotlib.pyplot.savefig(f"./data/bot/ac_{enemy_ac}.png")
 
         # count vs log(dmg), normal scale
         _, ax = matplotlib.pyplot.subplots()
@@ -96,7 +99,7 @@ def run_simulations():
         ax.locator_params(axis="x", integer=True)
         ax.set_ylabel('count')
         ax.set_xlabel('log(dmg)')
-        ax.set_title(f"infinity axe log(dmg) vs ac={enemy_ac} (med={median}, avg={average})")
-        matplotlib.pyplot.savefig(f"./data/inf/ac_{enemy_ac}_log.png")
+        ax.set_title(f"ragebot3000 log(dmg) vs ac={enemy_ac} (med={median}, avg={average})")
+        matplotlib.pyplot.savefig(f"./data/bot/ac_{enemy_ac}_log.png")
 
 run_simulations()
