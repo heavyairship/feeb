@@ -27,13 +27,13 @@ def hit_roll(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
         print(msg)
     if not out["hit"] and advantage:
         if verbose:
-            print(f"{indent} (APPLY ADVANTAGE)")
+            print(f"{indent}APPLY ADVANTAGE")
         return hit_roll(hit_dc, enemy_ac, indent, advantage=False, verbose=verbose)
     return out
 
 def dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=True, crit=False):
     dmg = 0
-    for i in range(num_die):
+    for _ in range(num_die):
         dmg += roll(die_rank)
     tot_dmg = dmg + dmg_mod
     if verbose:
@@ -44,22 +44,6 @@ def dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=True, crit=False):
             msg = f"{indent}{INDENT}DMG ROLL: {dmg} + {dmg_mod} = {tot_dmg}"
         print(msg)
     return tot_dmg
-
-def new_crit_thread(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
-    total_dmg = 0
-    dmg = 0
-    if verbose:
-        msg = f"{indent}START THREAD"
-        print(msg)
-    while True:
-        dmg = _inf_axe_attack(hit_dc, enemy_ac, indent + INDENT, advantage=advantage, verbose=verbose)
-        if dmg == 0:
-            break
-        total_dmg += dmg
-    if verbose:
-        msg = f"{indent}END THREAD: TOTAL CRIT THREAD DMG: {total_dmg}"
-        print(msg)
-    return total_dmg
 
 def _inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
 
@@ -72,9 +56,33 @@ def _inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
 
     if not hit_result["crit"]:
         return dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=False) if hit_result["hit"] else 0
-    else:
-        return dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=True) + \
-            new_crit_thread(hit_dc, enemy_ac, indent + INDENT, advantage=advantage, verbose=verbose)
+    
+    tot_dmg = dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=True)
+    crit_threads = 1
+    if verbose:
+        print(f"{indent}ADDING CRIT THREAD")
+    while crit_threads > 0:
+        if verbose:
+            msg = f"{indent}START CRIT THREAD (PENDING CRIT THREADS: {crit_threads})"
+            print(msg)
+        crit_threads -= 1
+        thread_dmg = 0
+        while True:
+            hit_result = hit_roll(hit_dc, enemy_ac, indent + INDENT, advantage=advantage, verbose=verbose)
+            if not hit_result["hit"]:
+                break
+            if not hit_result["crit"]:
+                thread_dmg += dmg_roll(die_rank, num_die, dmg_mod, indent + INDENT, verbose=verbose, crit=False)
+            else:
+                crit_threads += 1
+                if verbose:
+                    print(f"{indent + INDENT}ADDING CRIT THREAD")
+                thread_dmg += dmg_roll(die_rank, num_die, dmg_mod, indent + INDENT, verbose=verbose, crit=True)
+        if verbose:
+            msg = f"{indent}END THREAD: CRIT THREAD DMG: {thread_dmg}"
+            print(msg)
+        tot_dmg += thread_dmg
+    return tot_dmg
 
 def inf_axe_attack(hit_dc, enemy_ac, advantage=False, verbose=True):
     tot_dmg = _inf_axe_attack(hit_dc, enemy_ac, '', advantage=advantage, verbose=verbose)
@@ -95,7 +103,7 @@ def median(results):
         return average([_sorted[middle],_sorted[middle-1]]) 
     return _sorted[middle]
 
-enemy_acs = range(11,22)
+enemy_acs = range(15,22)
 hit_dc = 9
 advantage = True
 trials = 1000
@@ -104,13 +112,7 @@ verbose = False
 for enemy_ac in enemy_acs:
     results = []
     for i in range(trials):
-        try:
-            results.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
-        except RecursionError as e:
-            if verbose:
-                print(e)
-            # FixMe: this is a hack lol, change to iterative to avoid recursion errs
-            results.append(MAX_DMG)
+        results.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
         if verbose:
             print("************")
     print(f"ENEMY AC: {enemy_ac}")
