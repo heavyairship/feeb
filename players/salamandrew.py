@@ -2,7 +2,15 @@ import dnd
 import numpy
 import matplotlib.pyplot
 
-def eldritch_blast_attack(hit_dc, enemy_ac, indent, verbose=True):
+def hex_attack(indent, verbose=True, crit=False):
+    # Hex key stats
+    die_rank = 6
+    num_die = 1
+    dmg_mod = 0
+    dnd.log(f"{indent}APPLYING HEX", verbose)
+    return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=crit)
+
+def eldritch_blast_attack(hit_dc, enemy_ac, indent, verbose=True, hex=False):
     # Eldritch Blast key stats
     die_rank = 10
     num_die = 1
@@ -10,10 +18,11 @@ def eldritch_blast_attack(hit_dc, enemy_ac, indent, verbose=True):
 
     hit_result = dnd.hit_roll(hit_dc, enemy_ac, indent, verbose=verbose)
     if hit_result["hit"]:
-        return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=hit_result["crit"])
+        return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=hit_result["crit"]) + \
+            (hex_attack(indent + dnd.INDENT, verbose=verbose, crit=hit_result["crit"]) if hex else 0)
     return 0
 
-def tentacle_attack(hit_dc, enemy_ac, indent, verbose=True):
+def tentacle_attack(hit_dc, enemy_ac, indent, verbose=True, hex=False):
     # Tentacle key stats
     die_rank = 8
     num_die = 2
@@ -21,14 +30,15 @@ def tentacle_attack(hit_dc, enemy_ac, indent, verbose=True):
 
     hit_result = dnd.hit_roll(hit_dc, enemy_ac, indent, verbose=verbose)
     if hit_result["hit"]:
-        return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=hit_result["crit"])
+       return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=hit_result["crit"]) + \
+            (hex_attack(indent + dnd.INDENT, verbose=verbose, crit=hit_result["crit"]) if hex else 0)
     return 0
 
-def salamandrew_attack(num_eb, hit_dc, enemy_ac, verbose=True):
+def salamandrew_attack(num_eb, hit_dc, enemy_ac, verbose=True, hex=False):
     tot_dmg = 0
     for _ in range(num_eb):
-        tot_dmg += eldritch_blast_attack(hit_dc, enemy_ac, '', verbose=verbose)
-    tot_dmg += tentacle_attack(hit_dc, enemy_ac, '', verbose=verbose)
+        tot_dmg += eldritch_blast_attack(hit_dc, enemy_ac, '', verbose=verbose, hex=hex)
+    tot_dmg += tentacle_attack(hit_dc, enemy_ac, '', verbose=verbose, hex=hex)
     dnd.log(f"TOTAL DMG: {tot_dmg}", verbose)
     return tot_dmg
 
@@ -36,12 +46,13 @@ def run_simulations():
     enemy_acs = range(15, 22)
     num_eb = 2
     hit_dc = 9
-    trials = 100000
+    trials = 1000
     verbose = False
+    hex = True
     for enemy_ac in enemy_acs:
         data = []
         for _ in range(trials):
-            data.append(salamandrew_attack(num_eb, hit_dc, enemy_ac, verbose=verbose))
+            data.append(salamandrew_attack(num_eb, hit_dc, enemy_ac, verbose=verbose, hex=hex))
             dnd.log("************", verbose)
 
         data = sorted(data)

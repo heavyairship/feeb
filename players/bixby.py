@@ -2,6 +2,13 @@ import dnd
 import numpy
 import matplotlib.pyplot
 
+def divine_smite(indent, verbose=True, crit=False):
+    # Divine smite stats (assuming lvl 1 spell slot)
+    die_rank = 8
+    num_die = 2
+    dmg_mod = 0
+    return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=crit)
+
 def flail_attack(hit_dc, enemy_ac, indent, verbose=True):
     # Flail key stats
     die_rank = 8
@@ -10,7 +17,7 @@ def flail_attack(hit_dc, enemy_ac, indent, verbose=True):
 
     hit_result = dnd.hit_roll(hit_dc, enemy_ac, indent, verbose=verbose)
     if hit_result["hit"]:
-        return dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=hit_result["crit"])
+        return divine_smite(indent, verbose=verbose, crit=hit_result["crit"]) + dnd.dmg_roll(die_rank, num_die, dmg_mod, indent, verbose=verbose, crit=hit_result["crit"])
     return 0
 
 def bixby_attack(attacks, hit_dc, enemy_ac, verbose=True):
@@ -24,7 +31,7 @@ def run_simulations():
     enemy_acs = range(15, 22)
     attacks = 2
     hit_dc = 8
-    trials = 100000
+    trials = 1000
     verbose = False
     for enemy_ac in enemy_acs:
         data = []
