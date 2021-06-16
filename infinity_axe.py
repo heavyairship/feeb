@@ -1,4 +1,4 @@
-import random, sys, numpy
+import random, sys, numpy, math
 import matplotlib.pyplot as plt
 
 sys.setrecursionlimit(5000)
@@ -92,19 +92,25 @@ def inf_axe_attack(hit_dc, enemy_ac, advantage=False, verbose=True):
     return tot_dmg
 
 def get_bins():
-    out = list(range(0,101))
-    for e in range(2, 7):
-        for i in range(10**e, 10**(e+1)+1):
-            if i % (10**e) == 0:
-                out.append(i)
+    out = list(range(0, 101))
+    for e in range(2, 10):
+        for i in range(1, 11):
+            out.append(i*(10**e))
     return sorted(list(set(out)))
 
+def get_log_bins():
+    return [x/10 for x in range(100)]
+
+def trim_bins(bins, data):
+    return [x for x in bins if x <= max(data)+1
+    ]
 enemy_acs = range(15,22)
 hit_dc = 9
 advantage = True
 trials = 1000
 verbose = False
 bins = get_bins()
+log_bins = get_log_bins()
 
 for enemy_ac in enemy_acs:
     data = []
@@ -113,9 +119,10 @@ for enemy_ac in enemy_acs:
         if verbose:
             print("************")
 
-    data = sorted(data)
     average = numpy.average(data)
     median = int(numpy.median(data))
+    data = sorted(data)
+    log_data = sorted([math.log(x, 10) if x > 0 else 0 for x in data])
 
     print(f"ENEMY AC: {enemy_ac}")
     print(f"PLAYER HIT DC: {hit_dc}")
@@ -124,7 +131,7 @@ for enemy_ac in enemy_acs:
     print("************")
 
     fig, ax = plt.subplots()
-    ax.hist(data, bins=bins, ec="k")
+    ax.hist(data, bins=trim_bins(bins, data), ec="k")
     ax.locator_params(axis="y", integer=True)
     ax.locator_params(axis="x", integer=True)
     ax.set_xscale('log')
@@ -132,3 +139,12 @@ for enemy_ac in enemy_acs:
     ax.set_xlabel('log(dmg)')
     ax.set_title(f"infinity axe dmg vs ac={enemy_ac} (median={median})")
     plt.savefig(f"ac_{enemy_ac}.png")
+
+    fig, ax = plt.subplots()
+    ax.hist(log_data, bins=trim_bins(log_bins, log_data), ec="k")
+    ax.locator_params(axis="y", integer=True)
+    ax.locator_params(axis="x", integer=True)
+    ax.set_ylabel('count')
+    ax.set_xlabel('log(dmg)')
+    ax.set_title(f"infinity axe log(dmg) vs ac={enemy_ac} (median={median})")
+    plt.savefig(f"ac_{enemy_ac}_log.png")
