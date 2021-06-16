@@ -93,7 +93,7 @@ def inf_axe_attack(hit_dc, enemy_ac, advantage=False, verbose=True):
 
 def get_bins():
     out = list(range(0,101))
-    for e in range(2, 5):
+    for e in range(2, 7):
         for i in range(10**e, 10**(e+1)+1):
             if i % (10**e) == 0:
                 out.append(i)
@@ -113,8 +113,8 @@ for enemy_ac in enemy_acs:
         data.append(inf_axe_attack(hit_dc, enemy_ac, advantage=advantage, verbose=verbose))
         if verbose:
             print("************")
+            
     data = sorted(data)
-
     average = numpy.average(data)
     median = int(numpy.median(data))
 
@@ -122,6 +122,7 @@ for enemy_ac in enemy_acs:
     print(f"PLAYER HIT DC: {hit_dc}")
     print(f"AVERAGE DMG (N={trials}): {average}")
     print(f"MEDIAN DMG (N={trials}): {median}")
+    print(data)
     print("************")
 
     fig, ax = plt.subplots()
