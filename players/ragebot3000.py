@@ -4,6 +4,8 @@ import matplotlib.pyplot
 import dnd
 import dnd_stats
 
+MAX_DMG = 1e7
+
 def inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
 
     # Infinity Axe key stats
@@ -20,6 +22,8 @@ def inf_axe_attack(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
     crit_threads = 1
     dnd.log(f"{indent}ADDING CRIT THREAD", verbose)
     while crit_threads > 0:
+        if tot_dmg > MAX_DMG:
+            return tot_dmg
         dnd.log(f"{indent}START CRIT THREAD (PENDING CRIT THREADS: {crit_threads})", verbose)
         crit_threads -= 1
         thread_dmg = 0
@@ -59,10 +63,14 @@ def run_simulations():
     attacks = 2
     hit_dc = 9
     advantage = True
+    champion = True
     trials = 100
     verbose = False
     bins = get_bins()
     log_bins = get_log_bins()
+
+    if champion:
+        dnd.crit = lambda roll: roll == 19 or roll == 20
 
     for enemy_ac in enemy_acs:
         data = []

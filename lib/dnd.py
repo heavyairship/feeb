@@ -1,8 +1,10 @@
 import random 
 
 INDENT = "  "
-CRIT_ROLL = 20
 CRIT_MULTIPLIER = 2
+
+def crit(roll):
+    return roll == 20
 
 def log(msg, verbose):
     if verbose:
@@ -16,7 +18,7 @@ def hit_roll(hit_dc, enemy_ac, indent, advantage=False, verbose=True):
     tot_roll = _roll+hit_dc
     msg = f"{indent}HIT ROLL: {_roll} + {hit_dc} = {tot_roll}"
     out = {"crit": False, "hit": False}
-    if _roll == CRIT_ROLL:
+    if crit(_roll):
         msg += f" (CRIT)"
         out["crit"] = True
     if (tot_roll >= enemy_ac) or out["crit"]:
