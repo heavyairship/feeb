@@ -44,7 +44,7 @@ def salamandrew_attack(num_eb, hit_dc, enemy_ac, verbose=True, hex=False):
 
 def run_simulations():
     enemy_acs = range(15, 22)
-    num_eb = 2
+    num_eb = 3
     hit_dc = 9
     trials = 1000
     verbose = False
