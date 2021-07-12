@@ -1,12 +1,14 @@
 import salamandrew
 import ragebot3000
-import dnd
 
 import pdb
 import random
 
+def noop():
+    pass
+
 class Player(object):
-    def __init__(self, name, hp, ac, attack_fun):
+    def __init__(self, name="", hp=0, ac=0, attack_fun=noop):
         self.name = name
         self.hp = hp
         self.ac = ac
@@ -21,8 +23,18 @@ class Player(object):
 def run_trial():
     verbose = False
     players = [
-        Player("salamandrew", 102, 17, lambda: salamandrew.salamandrew_attack(3, 9, 18, verbose=verbose, hex=True)),
-        Player("ragebot3000", 112, 18, lambda: ragebot3000.ragebot3000_attack(2, 9, 17, advantage=False, verbose=verbose))
+        Player(
+            name="salamandrew", 
+            hp=102, 
+            ac=17, 
+            attack_fun=lambda: salamandrew.salamandrew_attack(3, 9, 18, verbose=verbose, hex=True)
+        ),
+        Player(
+            name="ragebot3000", 
+            hp=112, 
+            ac=18, 
+            attack_fun=lambda: ragebot3000.ragebot3000_attack(2, 9, 17, advantage=False, verbose=verbose)
+        )
     ]
     random.shuffle(players)
     while True:
