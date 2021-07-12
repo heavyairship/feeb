@@ -58,4 +58,5 @@ def run_simulations():
         ax.set_title(f"bixby dmg vs ac={enemy_ac} (med={median}, avg={average})")
         matplotlib.pyplot.savefig(f"./data/bix/ac_{enemy_ac}.png")
 
-run_simulations()
+if __name__ == "__main__":
+    run_simulations()

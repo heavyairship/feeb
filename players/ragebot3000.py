@@ -110,4 +110,5 @@ def run_simulations():
         ax.set_title(f"ragebot3000 log(dmg) vs ac={enemy_ac} (med={median}, avg={average})")
         matplotlib.pyplot.savefig(f"./data/bot/ac_{enemy_ac}_log.png")
 
-run_simulations()
+if __name__ == "__main__":
+    run_simulations()
